@@ -1,4 +1,6 @@
 <launch>
+  <arg name="tier4_simulator_launch_param_path" default="$(find-pkg-share simulator_launch)/config" description="tier4_simulator_launch parameter path"/>
+
   <arg name="launch_dummy_perception"/>
   <arg name="launch_dummy_vehicle"/>
   <arg name="vehicle_info_param_file"/>
@@ -15,7 +17,7 @@
 
   <group if="$(var scenario_simulation)">
     <include file="$(find-pkg-share fault_injection)/launch/fault_injection.launch.xml">
-      <arg name="config_file" value="$(find-pkg-share simulator_launch)/config/fault_injection.param.yaml"/>
+      <arg name="config_file" value="$(var tier4_simulator_launch_param_path)/config/fault_injection.param.yaml"/>
     </include>
   </group>
 
@@ -47,8 +49,7 @@
       <!-- tracking module -->
       <group>
         <push-ros-namespace namespace="tracking"/>
-        <include file="$(find-pkg-share perception_launch)/launch/object_recognition/tracking/tracking.launch.xml">
-        </include>
+        <include file="$(find-pkg-share perception_launch)/launch/object_recognition/tracking/tracking.launch.xml"/>
       </group>
       <!-- prediction module -->
       <group>
@@ -67,7 +68,6 @@
       </node>
     </group>
 
-
     <!-- traffic light module -->
     <group if="$(var perception/enable_traffic_light)">
       <push-ros-namespace namespace="traffic_light_recognition"/>
@@ -84,5 +84,4 @@
       <arg name="initial_engage_state" value="$(var initial_engage_state)"/>
     </include>
   </group>
-
 </launch>
