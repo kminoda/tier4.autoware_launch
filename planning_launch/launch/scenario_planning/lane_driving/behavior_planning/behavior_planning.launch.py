@@ -396,13 +396,23 @@ def generate_launch_description():
         extra_arguments=[{"use_intra_process_comms": LaunchConfiguration("use_intra_process")}],
     )
 
-    container = ComposableNodeContainer(
-        name="behavior_planning_container",
+    behavior_path_container = ComposableNodeContainer(
+        name="behavior_path_container",
         namespace="",
         package="rclcpp_components",
         executable=LaunchConfiguration("container_executable"),
         composable_node_descriptions=[
             behavior_path_planner_component,
+        ],
+        output="screen",
+    )
+
+    behavior_velocity_container = ComposableNodeContainer(
+        name="behavior_velocity_container",
+        namespace="",
+        package="rclcpp_components",
+        executable=LaunchConfiguration("container_executable"),
+        composable_node_descriptions=[
             behavior_velocity_planner_component,
         ],
         output="screen",
@@ -476,7 +486,8 @@ def generate_launch_description():
             DeclareLaunchArgument("use_multithread", default_value="false"),
             set_container_executable,
             set_container_mt_executable,
-            container,
+            behavior_velocity_container,
+            behavior_path_container,
             load_compare_map,
             load_vector_map_inside_area_filter,
         ]
