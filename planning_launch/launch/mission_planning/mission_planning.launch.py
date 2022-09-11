@@ -47,6 +47,15 @@ def generate_launch_description():
                     {"use_intra_process_comms": LaunchConfiguration("use_intra_process")}
                 ],
             ),
+        ],
+    )
+
+    mission_visualize_container = ComposableNodeContainer(
+        name="mission_visualize_container",
+        namespace="",
+        package="rclcpp_components",
+        executable="component_container",
+        composable_node_descriptions=[
             ComposableNode(
                 package="mission_planner",
                 plugin="mission_planner::GoalPoseVisualizer",
@@ -69,5 +78,6 @@ def generate_launch_description():
                 description="use ROS2 component container communication",
             ),
             container,
+            mission_visualize_container,
         ]
     )
