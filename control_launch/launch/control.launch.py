@@ -217,11 +217,53 @@ def launch_setup(context, *args, **kwargs):
         namespace="",
         package="rclcpp_components",
         executable=LaunchConfiguration("container_executable"),
+        composable_node_descriptions=[],
+    )
+
+    control_container = ComposableNodeContainer(
+        name="control_node_container",
+        namespace="",
+        package="rclcpp_components",
+        executable=LaunchConfiguration("container_executable"),
         composable_node_descriptions=[
             controller_component,
+        ],
+    )
+
+    lane_departure_container = ComposableNodeContainer(
+        name="lane_departure_container",
+        namespace="",
+        package="rclcpp_components",
+        executable=LaunchConfiguration("container_executable"),
+        composable_node_descriptions=[
             lane_departure_component,
+        ],
+    )
+
+    shift_container = ComposableNodeContainer(
+        name="shift_container",
+        namespace="",
+        package="rclcpp_components",
+        executable=LaunchConfiguration("container_executable"),
+        composable_node_descriptions=[
             shift_decider_component,
-            vehicle_cmd_gate_component,
+        ],
+    )
+
+    gate_container = ComposableNodeContainer(
+        name="gate_container",
+        namespace="",
+        package="rclcpp_components",
+        executable=LaunchConfiguration("container_executable"),
+        composable_node_descriptions=[vehicle_cmd_gate_component],
+    )
+
+    operation_container = ComposableNodeContainer(
+        name="operation_container",
+        namespace="",
+        package="rclcpp_components",
+        executable=LaunchConfiguration("container_executable"),
+        composable_node_descriptions=[
             operation_mode_transition_manager_component,
         ],
     )
@@ -230,6 +272,11 @@ def launch_setup(context, *args, **kwargs):
         [
             PushRosNamespace("control"),
             container,
+            control_container,
+            lane_departure_container,
+            shift_container,
+            gate_container,
+            operation_container,
             external_cmd_selector_loader,
             external_cmd_converter_loader,
         ]
