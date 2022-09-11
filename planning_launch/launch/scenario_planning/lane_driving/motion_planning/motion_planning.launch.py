@@ -222,8 +222,8 @@ def generate_launch_description():
         extra_arguments=[{"use_intra_process_comms": LaunchConfiguration("use_intra_process")}],
     )
 
-    container = ComposableNodeContainer(
-        name="motion_planning_container",
+    obstacle_avoidance_container = ComposableNodeContainer(
+        name="obstacle_avoidance_container",
         namespace="",
         package="rclcpp_components",
         executable=LaunchConfiguration("container_executable"),
@@ -232,27 +232,43 @@ def generate_launch_description():
         ],
     )
 
+    obstacle_stop_container = ComposableNodeContainer(
+        name="obstacle_stop_container",
+        namespace="",
+        package="rclcpp_components",
+        executable=LaunchConfiguration("container_executable"),
+        composable_node_descriptions=[],
+    )
+
+    surround_obstacle_container = ComposableNodeContainer(
+        name="surround_obstacle_container",
+        namespace="",
+        package="rclcpp_components",
+        executable=LaunchConfiguration("container_executable"),
+        composable_node_descriptions=[],
+    )
+
     obstacle_stop_planner_loader = LoadComposableNodes(
         composable_node_descriptions=[obstacle_stop_planner_component],
-        target_container=container,
+        target_container=obstacle_stop_container,
         condition=LaunchConfigurationEquals("cruise_planner", "obstacle_stop_planner"),
     )
 
     obstacle_cruise_planner_loader = LoadComposableNodes(
         composable_node_descriptions=[obstacle_cruise_planner_component],
-        target_container=container,
+        target_container=obstacle_stop_container,
         condition=LaunchConfigurationEquals("cruise_planner", "obstacle_cruise_planner"),
     )
 
     obstacle_cruise_planner_relay_loader = LoadComposableNodes(
         composable_node_descriptions=[obstacle_cruise_planner_relay_component],
-        target_container=container,
+        target_container=obstacle_stop_container,
         condition=LaunchConfigurationEquals("cruise_planner", "none"),
     )
 
     surround_obstacle_checker_loader = LoadComposableNodes(
         composable_node_descriptions=[surround_obstacle_checker_component],
-        target_container=container,
+        target_container=surround_obstacle_container,
         condition=IfCondition(LaunchConfiguration("use_surround_obstacle_check")),
     )
 
@@ -281,7 +297,9 @@ def generate_launch_description():
             DeclareLaunchArgument("use_multithread", default_value="false"),
             set_container_executable,
             set_container_mt_executable,
-            container,
+            obstacle_avoidance_container,
+            obstacle_stop_container,
+            surround_obstacle_container,
             surround_obstacle_checker_loader,
             obstacle_stop_planner_loader,
             obstacle_cruise_planner_loader,
