@@ -15,7 +15,7 @@
     <arg name="input_route" value="/planning/mission_planning/route"/>
     <arg name="input_odometry" value="/localization/kinematic_state"/>
     <arg name="output_scenario" value="/planning/scenario_planning/scenario"/>
-    <arg name="output_trajectory" value="/planning/scenario_planning/scenario_selector/trajectory"/>
+    <arg name="output_trajectory" value="/planning/scenario_planning/scenario_selector/trajectory_autoware"/>
     <arg name="is_parking_completed" value="/planning/scenario_planning/parking/is_completed"/>
   </include>
 
