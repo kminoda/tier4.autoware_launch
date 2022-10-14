@@ -15,7 +15,7 @@
     <arg name="input_route" value="/planning/mission_planning/route"/>
     <arg name="input_odometry" value="/localization/kinematic_state"/>
     <arg name="output_scenario" value="/planning/scenario_planning/scenario"/>
-    <arg name="output_trajectory" value="/planning/scenario_planning/scenario_selector/trajectory_autoware"/>
+    <arg name="output_trajectory" value="/planning/scenario_planning/scenario_selector/trajectory"/>
     <arg name="is_parking_completed" value="/planning/scenario_planning/parking/is_completed"/>
   </include>
 
@@ -30,7 +30,7 @@
     <!-- motion velocity smoother -->
     <arg name="smoother_type" default="JerkFiltered" description="options: JerkFiltered, L2, Analytical, Linf(Unstable)"/>
     <set_remap from="~/input/trajectory" to="/planning/scenario_planning/scenario_selector/trajectory" />
-    <set_remap from="~/output/trajectory" to="/planning/scenario_planning/trajectory" />
+    <set_remap from="~/output/trajectory" to="/planning/scenario_planning/trajectory_autoware" />
     <include file="$(find-pkg-share motion_velocity_smoother)/launch/motion_velocity_smoother.launch.xml">
       <arg name="smoother_type" value="$(var smoother_type)" />
       <arg name="common_param_path" value="$(var common_param_path)"/>
